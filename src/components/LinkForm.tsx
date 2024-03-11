@@ -15,14 +15,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "./ui/button";
 
-import { createShortlink } from "@/app/actions";
+// import { createShortlink } from "@/app/actions";
 
 export const LinkFormSchema = z.object({
   slug: z.string().min(1),
   url: z.string().url(),
 });
 
-const LinkForm = () => {
+interface LinkFormProps {
+  createShortlink: (slug: string, urL: string) => Promise<{ id: string }>;
+}
+
+const LinkForm: React.FC<LinkFormProps> = ({ createShortlink }) => {
   const form = useForm<z.infer<typeof LinkFormSchema>>({
     resolver: zodResolver(LinkFormSchema),
     defaultValues: {
