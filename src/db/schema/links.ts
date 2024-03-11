@@ -14,7 +14,7 @@ export const links = sqliteTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     slug: text("slug").notNull(),
-    redirect_url: text("redirect_url").notNull(),
+    redirectUrl: text("redirect_url").notNull(),
     visits: integer("visits").default(0).notNull(),
   },
   (table) => {

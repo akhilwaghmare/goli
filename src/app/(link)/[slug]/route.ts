@@ -15,7 +15,7 @@ export async function GET(
     .get();
 
   // If no valid slug is found, redirect to a 404 page
-  const redirectURL = storedLink?.redirect_url ?? "/";
+  const redirectURL = storedLink?.redirectUrl ?? "/";
 
   // TODO: Increment the visits count
 
