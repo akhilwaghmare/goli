@@ -10,6 +10,8 @@ import (
 	localservice "github.com/go-links/local-service"
 )
 
+var version = "dev"
+
 func main() {
 	httpListen := flag.String("http-listen", "127.0.0.1:80", "loopback HTTP address")
 	httpsListen := flag.String("https-listen", "127.0.0.1:443", "loopback HTTPS address")
@@ -26,7 +28,7 @@ func main() {
 	if err := os.MkdirAll(*dataDir, 0755); err != nil {
 		log.Fatal(err)
 	}
-	s, err := localservice.New(filepath.Join(*dataDir, "links.db"))
+	s, err := localservice.NewWithVersion(filepath.Join(*dataDir, "links.db"), version)
 	if err != nil {
 		log.Fatal(err)
 	}

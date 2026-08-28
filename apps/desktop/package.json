@@ -1,0 +1,38 @@
+{
+  "name": "@go-links/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist-electron/main.cjs",
+  "scripts": {
+    "dev": "bun run build:electron && concurrently -k \"vite --host 127.0.0.1\" \"wait-on tcp:127.0.0.1:5173 && env -u ELECTRON_RUN_AS_NODE cross-env GOLI_DEV_SERVER_URL=http://127.0.0.1:5173 electron .\"",
+    "build:electron": "vite build --config vite.main.config.ts && vite build --config vite.preload.config.ts",
+    "build": "bun run build:electron && vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dir --arm64",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.1.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "44.0.0",
+    "electron-builder": "26.15.3",
+    "typescript": "^5.7.3",
+    "vite": "^8.2.2",
+    "wait-on": "^8.0.3"
+  },
+  "build": {
+    "appId": "com.golinks.goli",
+    "productName": "Goli",
+    "directories": { "output": "release" },
+    "files": ["dist/**/*", "dist-electron/**/*", "package.json"],
+    "mac": { "category": "public.app-category.productivity", "target": ["dir"], "extendInfo": { "CFBundleURLTypes": [{ "CFBundleURLName": "Goli", "CFBundleURLSchemes": ["goli"] }] } }
+  }
+}

@@ -11,7 +11,7 @@ import (
 
 func newTestServer(t *testing.T) *Server {
 	t.Helper()
-	s, err := New(filepath.Join(t.TempDir(), "links.db"), []byte(`<body>editLink</body>`))
+	s, err := New(filepath.Join(t.TempDir(), "links.db"), "test")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -85,11 +85,19 @@ func TestCrossOriginWriteIsRejected(t *testing.T) {
 	}
 }
 
-func TestDashboardIsAvailableAtAdmin(t *testing.T) {
+func TestDashboardRouteIsNotAvailable(t *testing.T) {
 	s := newTestServer(t)
 	w := request(s, "GET", "/admin", "", false)
-	if w.Code != http.StatusOK || !bytes.Contains(w.Body.Bytes(), []byte("editLink")) {
-		t.Fatalf("dashboard missing edit controls: %d", w.Code)
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("dashboard route should be removed: %d", w.Code)
+	}
+}
+
+func TestHealthIncludesVersion(t *testing.T) {
+	s := newTestServer(t)
+	w := request(s, "GET", "/api/health", "", false)
+	if w.Code != http.StatusOK || !bytes.Contains(w.Body.Bytes(), []byte(`"version":"test"`)) {
+		t.Fatalf("health=%d %s", w.Code, w.Body.String())
 	}
 }
 

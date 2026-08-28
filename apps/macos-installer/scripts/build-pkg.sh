@@ -7,16 +7,20 @@ export COPYFILE_DISABLE=1
 root_dir="$(cd "$(dirname "$0")/../../.." && pwd)"
 service_dir="$root_dir/apps/local-service"
 installer_dir="$root_dir/apps/macos-installer"
+desktop_app="$root_dir/apps/desktop/release/mac-arm64/Goli.app"
 build_dir="$(mktemp -d)"
 trap 'rm -rf "$build_dir"' EXIT
 
 command -v go >/dev/null || { echo "Go 1.22 or newer is required to build the local service." >&2; exit 1; }
+[[ -d "$desktop_app" ]] || { echo "Desktop build missing. Run bun run build:desktop first." >&2; exit 1; }
 mkdir -p "$build_dir/root/usr/local/libexec/goli" "$build_dir/root/Library/LaunchDaemons" "$build_dir/root/Applications" "$build_dir/scripts" "$root_dir/dist"
-(cd "$service_dir" && go build -o "$build_dir/root/usr/local/libexec/goli/goli" ./cmd/golinks)
+(cd "$service_dir" && go build -ldflags "-X main.version=${VERSION:-0.1.0}" -o "$build_dir/root/usr/local/libexec/goli/goli" ./cmd/golinks)
 cp "$installer_dir/scripts/uninstall.sh" "$build_dir/root/usr/local/libexec/goli/uninstall.sh"
 chmod 755 "$build_dir/root/usr/local/libexec/goli/uninstall.sh"
-cp -R "$installer_dir/app/Goli.app" "$build_dir/root/Applications/Goli.app"
-chmod 755 "$build_dir/root/Applications/Goli.app/Contents/MacOS/Goli"
+cp "$installer_dir/scripts/setup.sh" "$build_dir/root/usr/local/libexec/goli/setup.sh"
+cp "$installer_dir/scripts/goli-maintenance" "$build_dir/root/usr/local/libexec/goli/goli-maintenance"
+chmod 755 "$build_dir/root/usr/local/libexec/goli/setup.sh" "$build_dir/root/usr/local/libexec/goli/goli-maintenance"
+cp -R "$desktop_app" "$build_dir/root/Applications/Goli.app"
 cp "$installer_dir/launchd/com.golinks.local.plist" "$build_dir/root/Library/LaunchDaemons/com.goli.local.plist"
 cp "$installer_dir/scripts/postinstall" "$build_dir/scripts/postinstall"
 chmod 755 "$build_dir/scripts/postinstall"

@@ -36,16 +36,16 @@ type exportFile struct {
 	Links   []Link `json:"links"`
 }
 type Server struct {
-	db        *sql.DB
-	adminHTML []byte
+	db      *sql.DB
+	version string
 }
 
-func New(dbPath string, adminHTML []byte) (*Server, error) {
+func New(dbPath, version string) (*Server, error) {
 	db, err := sql.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, err
 	}
-	s := &Server{db: db, adminHTML: adminHTML}
+	s := &Server{db: db, version: version}
 	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS links (id TEXT PRIMARY KEY, slug TEXT NOT NULL UNIQUE, destination_url TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, visits INTEGER NOT NULL DEFAULT 0)`)
 	if err != nil {
 		db.Close()
@@ -62,19 +62,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	switch {
 	case r.URL.Path == "/":
-		http.Redirect(w, r, "/admin", http.StatusFound)
-	case r.URL.Path == "/admin":
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		w.Write(s.dashboard())
+		s.notFound(w)
 	case strings.HasPrefix(r.URL.Path, "/api/"):
 		s.api(w, r)
 	default:
 		s.redirect(w, r)
 	}
-}
-
-func (s *Server) dashboard() []byte {
-	return s.adminHTML
 }
 
 func validSlug(v string) (string, error) {
@@ -195,14 +188,14 @@ func (s *Server) notFound(w http.ResponseWriter) {
 
 func (s *Server) api(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	if r.Method != http.MethodGet && r.Method != http.MethodHead && r.Header.Get("Origin") != "https://go.li" {
+	if r.Method != http.MethodGet && r.Method != http.MethodHead && r.Header.Get("Origin") != "https://go.li" && r.Header.Get("X-Goli-Desktop") != "1" {
 		writeError(w, http.StatusForbidden, "requests must come from the local Goli dashboard")
 		return
 	}
 	p := strings.TrimPrefix(r.URL.Path, "/api/")
 	switch {
 	case p == "health" && r.Method == http.MethodGet:
-		json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+		json.NewEncoder(w).Encode(map[string]string{"status": "ok", "version": s.version})
 	case p == "links" && r.Method == http.MethodGet:
 		links, err := s.list()
 		if err != nil {

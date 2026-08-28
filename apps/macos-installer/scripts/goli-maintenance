@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+command="${1:-}"
+data_dir="/Library/Application Support/Goli"
+
+status() {
+  service="stopped"; /bin/launchctl print system/com.goli.local >/dev/null 2>&1 && service="running"
+  hostname="missing"; /usr/bin/grep -qF '# goli managed' /etc/hosts && hostname="managed"
+  certificates="missing"; [[ -f "$data_dir/certs/server.pem" ]] && certificates="valid"
+  ports="available"; listeners=$({ /usr/sbin/lsof -nP -iTCP:80 -sTCP:LISTEN 2>/dev/null || true; /usr/sbin/lsof -nP -iTCP:443 -sTCP:LISTEN 2>/dev/null || true; }); if [[ -n "$listeners" ]]; then ports="conflict"; /usr/bin/printf '%s' "$listeners" | /usr/bin/grep -q 'goli' && ports="goli"; fi
+  logs=$(/usr/bin/tail -n 20 /var/log/goli-error.log 2>/dev/null | /usr/bin/python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().splitlines()))' || echo '[]')
+  printf '{"service":"%s","hostname":"%s","certificates":"%s","ports":"%s","logs":%s}\n' "$service" "$hostname" "$certificates" "$ports" "$logs"
+}
+[[ "$command" == "status" ]] && { status; exit 0; }
+[[ "${EUID}" -eq 0 ]] || { echo "Administrator privileges are required." >&2; exit 1; }
+case "$command" in
+  restart) /bin/launchctl kickstart -k system/com.goli.local; echo "Goli service restarted." ;;
+  repair) /usr/local/libexec/goli/setup.sh ;;
+  reset-certificates) /bin/rm -f "$data_dir/certs/server.pem" "$data_dir/certs/server-key.pem"; /usr/local/libexec/goli/setup.sh; echo "Goli certificates reset." ;;
+  uninstall-keep) /usr/local/libexec/goli/uninstall.sh; echo "Goli removed; local data was kept." ;;
+  uninstall-delete) /usr/local/libexec/goli/uninstall.sh; /bin/rm -f "$data_dir/links.db" "$data_dir/links.db-shm" "$data_dir/links.db-wal"; echo "Goli and local data were removed." ;;
+  *) echo "Unsupported maintenance action." >&2; exit 64 ;;
+esac

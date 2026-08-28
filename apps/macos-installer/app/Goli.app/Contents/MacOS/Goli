@@ -1,4 +1,0 @@
-#!/bin/bash
-# LaunchServices invokes this executable for goli:// URLs. The service itself
-# remains an ordinary local website, so the dashboard is also usable directly.
-/usr/bin/open "https://go.li/admin"
