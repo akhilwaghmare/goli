@@ -1,0 +1,64 @@
+#!/bin/bash
+set -euo pipefail
+
+hosts_file="/etc/hosts"
+marker="# goli managed"
+plist="/Library/LaunchDaemons/com.goli.local.plist"
+data_dir="/Library/Application Support/Goli"
+cert_dir="$data_dir/certs"
+ca_cert="$cert_dir/goli-local-ca.pem"
+ca_key="$cert_dir/goli-local-ca-key.pem"
+server_cert="$cert_dir/server.pem"
+server_key="$cert_dir/server-key.pem"
+openssl="/usr/bin/openssl"
+
+# A reinstall must release Goli's own listener before checking port 80. The
+# label is ours, so this never stops an unrelated service.
+/bin/launchctl bootout system/com.goli.local 2>/dev/null || true
+
+if /usr/sbin/lsof -nP -iTCP:80 -sTCP:LISTEN 2>/dev/null | /usr/bin/grep -q . || /usr/sbin/lsof -nP -iTCP:443 -sTCP:LISTEN 2>/dev/null | /usr/bin/grep -q .; then
+  echo "Goli was not installed because another service is using port 80 or 443." >&2
+  echo "Stop that service and run this installer again." >&2
+  exit 1
+fi
+
+if /usr/bin/grep -vF "$marker" "$hosts_file" | /usr/bin/awk '$1 !~ /^#/ { for (i=2; i<=NF; i++) if ($i == "go.li") found=1 } END { exit(found ? 0 : 1) }'; then
+  echo "Goli was not installed because the hostname 'go.li' is already configured." >&2
+  echo "Remove or rename the existing hostname entry, then run this installer again." >&2
+  exit 1
+fi
+
+if ! /usr/bin/grep -qF "$marker" "$hosts_file"; then
+  printf '\n127.0.0.1 go.li %s\n' "$marker" >> "$hosts_file"
+fi
+
+/bin/mkdir -p "$data_dir"
+/bin/chmod 0755 "$data_dir"
+/bin/mkdir -p "$cert_dir"
+/bin/chmod 0700 "$cert_dir"
+
+if [[ ! -f "$ca_cert" || ! -f "$ca_key" ]]; then
+  "$openssl" req -x509 -new -nodes -newkey rsa:2048 -sha256 -days 3650 -keyout "$ca_key" -out "$ca_cert" -subj "/CN=Goli Local CA"
+  /bin/chmod 0600 "$ca_key"
+  /usr/bin/security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "$ca_cert"
+fi
+
+needs_server_cert=false
+if [[ ! -f "$server_cert" || ! -f "$server_key" ]]; then
+  needs_server_cert=true
+elif ! "$openssl" x509 -checkend 2592000 -noout -in "$server_cert"; then
+  needs_server_cert=true
+fi
+
+if [[ "$needs_server_cert" == true ]]; then
+  /bin/rm -f "$server_cert" "$server_key" "$cert_dir/server.csr" "$cert_dir/server.ext" "$cert_dir/goli-local-ca.srl"
+  "$openssl" req -new -nodes -newkey rsa:2048 -keyout "$server_key" -out "$cert_dir/server.csr" -subj "/CN=go.li"
+  /usr/bin/printf '%s\n' 'basicConstraints=CA:FALSE' 'keyUsage=digitalSignature,keyEncipherment' 'extendedKeyUsage=serverAuth' 'subjectAltName=DNS:go.li,DNS:localhost,IP:127.0.0.1' > "$cert_dir/server.ext"
+  "$openssl" x509 -req -in "$cert_dir/server.csr" -CA "$ca_cert" -CAkey "$ca_key" -CAcreateserial -out "$server_cert" -days 825 -sha256 -extfile "$cert_dir/server.ext"
+  /bin/chmod 0600 "$server_key"
+  /bin/rm -f "$cert_dir/server.csr" "$cert_dir/server.ext" "$cert_dir/goli-local-ca.srl"
+fi
+/bin/launchctl bootstrap system "$plist"
+lsregister="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+if [[ -x "$lsregister" ]]; then "$lsregister" -f "/Applications/Goli.app"; fi
+echo "Goli is ready at goli://admin and https://go.li/admin"

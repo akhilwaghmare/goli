@@ -1,36 +1,15 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Goli
 
-## Getting Started
+Goli gives a Mac personal browser shortcuts such as `go.li/resume`. It has two products in one repository:
 
-First, run the development server:
+- `apps/website`: the public Next.js product and installation site.
+- `apps/local-service`: the loopback-only Go service that serves redirects and the dashboard at `https://go.li/admin`.
+- `apps/macos-installer`: scripts and launchd configuration for the unsigned macOS installer.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Development
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run `npm install`, then `npm run dev` to develop the website. The local service requires Go 1.22+; run its tests with `cd apps/local-service && go test ./...`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run `npm run package:macos` on a Mac with Go and Xcode command-line tools to produce `dist/goli-macos.pkg`. The installer uses administrator permission to reserve `go.li` in `/etc/hosts`, install a trusted Goli-only local certificate authority, bind local-only services to ports 80 and 443, and register `goli://admin`. It safely stops if either port is already in use.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Link data is SQLite in `/Library/Application Support/Goli/links.db`. The dashboard supports JSON export/import, and `sudo /usr/local/libexec/goli/uninstall.sh` removes the managed service, hostname entry, local CA, and private keys while keeping that data for backup.
