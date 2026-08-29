@@ -9,7 +9,7 @@ export default function Home() {
     <main className="overflow-hidden">
       <nav className="mx-auto flex h-[76px] max-w-[1140px] items-center justify-between px-7 max-[700px]:px-5">
         <a className="font-dm-mono text-[26px] font-bold text-[#17241e] no-underline" href="#top">
-          Goli<span className="text-[#e2532f]">.</span>
+          goli<span className="text-[#e2532f]">.</span>
         </a>
         <Button asChild variant="outline" size="sm" className="rounded-full border-[#17241e] bg-transparent text-[#17241e] hover:bg-[#e9e7df]">
           <a href="https://github.com/akhilwaghmare/goli" target="_blank" rel="noreferrer">
@@ -22,10 +22,14 @@ export default function Home() {
         id="top"
         className="flex min-h-[600px] flex-col items-center bg-[#f7f5ef] bg-[radial-gradient(circle_at_80%_12%,#d8ead3_0,transparent_24%)] px-7 py-[106px] text-center min-[1140px]:px-[calc((100vw-1084px)/2)] max-[700px]:py-20"
       >
-        <h1 className="max-w-[700px] font-newsreader text-[clamp(56px,9vw,112px)] leading-[.88] font-semibold tracking-[-.06em]">
+        <h1 className="max-w-[700px] font-newsreader text-[clamp(56px,9vw,112px)] leading-none font-semibold tracking-tight">
           Private, local shortlinks
         </h1>
-        <p className="my-[35px] max-w-[570px] text-xl leading-[1.5] text-[#4b5a51]">Create links with no limits. Use in any browser.</p>
+        <p className="my-[35px] max-w-[570px] text-xl leading-[1.5] text-[#4b5a51]">Create with no limits. Use in any browser.</p>
+        <div className="mb-12 w-full max-w-[540px] rounded-xl bg-[#17241e] p-7 text-left font-dm-mono text-base text-[#f8f7f2]">
+          <p><span className="text-[#a4d79a]">›</span> go.li/calendar</p>
+          <p className="text-[13px] text-[#9ca89f]">Opening calendar.google.com…</p>
+        </div>
         <div id="download" className="flex items-center justify-center">
           <Button
             asChild
@@ -38,15 +42,11 @@ export default function Home() {
             </a>
           </Button>
         </div>
-        <div className="mt-12 w-full max-w-[540px] rounded-xl bg-[#17241e] p-7 text-left font-dm-mono text-base text-[#f8f7f2]">
-          <p><span className="text-[#a4d79a]">›</span> go.li/calendar</p>
-          <p className="text-[13px] text-[#9ca89f]">Opening calendar.google.com…</p>
-        </div>
       </section>
       <section className="bg-[#f7f5ef] px-7 pb-[110px] max-[700px]:pb-[70px]">
         <Image
           src="/screenshot.png"
-          alt="Goli desktop app showing a list of saved links"
+          alt="goli desktop app showing a list of saved links"
           width={2464}
           height={1744}
           priority
@@ -59,7 +59,7 @@ export default function Home() {
             <HardDrive aria-hidden="true" className="size-5 text-[#507b63]" />
             <CardTitle className="font-newsreader text-[28px] leading-none tracking-[-.03em]">Stays on your computer</CardTitle>
             <CardDescription className="text-[15px] leading-[1.65] text-[#4b5a51]">
-              Goli runs only on your Mac. Your links, destinations, and visit counts are kept in a local database—not a cloud account.
+              goli runs only on your Mac. Your links, destinations, and visit counts are kept in a local database—not a cloud account.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -77,14 +77,13 @@ export default function Home() {
             <Code2 aria-hidden="true" className="size-5 text-[#507b63]" />
             <CardTitle className="font-newsreader text-[28px] leading-none tracking-[-.03em]">Open source</CardTitle>
             <CardDescription className="text-[15px] leading-[1.65] text-[#4b5a51]">
-              Inspect the code, make it your own, or help shape what Goli becomes next.
+              Inspect the code, make it your own, or help shape what goli becomes next.
             </CardDescription>
           </CardHeader>
         </Card>
       </section>
       <footer className="mx-auto flex max-w-[1084px] justify-between border-t border-[#dfded6] p-7 text-[13px] text-[#56675a] max-[700px]:flex-col max-[700px]:gap-3">
-        <span>Goli</span>
-        <span>Private by default. Local by design.</span>
+        <span>goli</span>
         <span>
           Created by <a className="underline underline-offset-3" href="https://github.com/akhilwaghmare">Akhil</a>
         </span>
