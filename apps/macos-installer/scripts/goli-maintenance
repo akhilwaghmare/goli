@@ -15,8 +15,7 @@ status() {
 [[ "${EUID}" -eq 0 ]] || { echo "Administrator privileges are required." >&2; exit 1; }
 case "$command" in
   restart) /bin/launchctl kickstart -k system/app.akhil.goli; echo "Goli service restarted." ;;
-  repair) /usr/local/libexec/goli/setup.sh ;;
-  reset-certificates) /bin/rm -f "$data_dir/certs/server.pem" "$data_dir/certs/server-key.pem"; /usr/local/libexec/goli/setup.sh; echo "Goli certificates reset." ;;
+  repair) /bin/rm -f "$data_dir/certs/server.pem" "$data_dir/certs/server-key.pem"; /usr/local/libexec/goli/setup.sh; echo "Goli repaired and its local certificate was refreshed." ;;
   uninstall-keep) /usr/local/libexec/goli/uninstall.sh; echo "Goli removed; local data was kept." ;;
   uninstall-delete) /usr/local/libexec/goli/uninstall.sh; /bin/rm -f "$data_dir/links.db" "$data_dir/links.db-shm" "$data_dir/links.db-wal"; echo "Goli and local data were removed." ;;
   *) echo "Unsupported maintenance action." >&2; exit 64 ;;

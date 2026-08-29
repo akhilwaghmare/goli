@@ -19,7 +19,7 @@ export type SystemStatus = {
   logs: string[];
 };
 
-export type MaintenanceAction = "restart" | "repair" | "reset-certificates" | "uninstall-keep" | "uninstall-delete";
+export type MaintenanceAction = "restart" | "repair" | "uninstall-keep" | "uninstall-delete";
 export type UpdateState =
   | { status: "disabled"; message: string }
   | { status: "idle" }

@@ -16,7 +16,11 @@ test("accepts only HTTP(S) destination URLs", () => {
 });
 
 test("only allows fixed maintenance actions", () => {
+  expect(validateMaintenanceAction("restart")).toBe("restart");
   expect(validateMaintenanceAction("repair")).toBe("repair");
+  expect(validateMaintenanceAction("uninstall-keep")).toBe("uninstall-keep");
+  expect(validateMaintenanceAction("uninstall-delete")).toBe("uninstall-delete");
+  expect(() => validateMaintenanceAction("reset-certificates")).toThrow();
   expect(() => validateMaintenanceAction("shell-command")).toThrow();
 });
 

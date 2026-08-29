@@ -24,7 +24,7 @@ export function validateDestinationUrl(value: unknown): string {
 }
 
 export function validateMaintenanceAction(value: unknown): MaintenanceAction {
-  const actions = ["restart", "repair", "reset-certificates", "uninstall-keep", "uninstall-delete"] as const;
+  const actions = ["restart", "repair", "uninstall-keep", "uninstall-delete"] as const;
   if (!actions.includes(value as MaintenanceAction)) throw new Error("Unsupported maintenance action.");
   return value as MaintenanceAction;
 }
