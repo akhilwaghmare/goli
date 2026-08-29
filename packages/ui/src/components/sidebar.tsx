@@ -5,25 +5,25 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { PanelLeftIcon } from "lucide-react"
 import { Slot } from "radix-ui"
 
-import { useIsMobile } from "@go-links/ui/hooks/use-mobile"
-import { cn } from "@go-links/ui/lib/utils"
-import { Button } from "@go-links/ui/components/button"
-import { Input } from "@go-links/ui/components/input"
-import { Separator } from "@go-links/ui/components/separator"
+import { useIsMobile } from "@goli/ui/hooks/use-mobile"
+import { cn } from "@goli/ui/lib/utils"
+import { Button } from "@goli/ui/components/button"
+import { Input } from "@goli/ui/components/input"
+import { Separator } from "@goli/ui/components/separator"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@go-links/ui/components/sheet"
-import { Skeleton } from "@go-links/ui/components/skeleton"
+} from "@goli/ui/components/sheet"
+import { Skeleton } from "@goli/ui/components/skeleton"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@go-links/ui/components/tooltip"
+} from "@goli/ui/components/tooltip"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

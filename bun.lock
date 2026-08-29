@@ -3,13 +3,13 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "go-links",
+      "name": "goli",
     },
     "apps/desktop": {
-      "name": "@go-links/desktop",
+      "name": "@goli/desktop",
       "version": "0.1.0",
       "dependencies": {
-        "@go-links/ui": "workspace:*",
+        "@goli/ui": "workspace:*",
         "@vitejs/plugin-react": "^5.1.1",
         "react": "19.2.8",
         "react-dom": "19.2.8",
@@ -30,10 +30,10 @@
       },
     },
     "apps/website": {
-      "name": "@go-links/website",
+      "name": "@goli/website",
       "version": "0.1.0",
       "dependencies": {
-        "@go-links/ui": "workspace:*",
+        "@goli/ui": "workspace:*",
         "lucide-react": "1.37.0",
         "next": "16.3.3",
         "react": "19.2.8",
@@ -50,7 +50,7 @@
       },
     },
     "packages/ui": {
-      "name": "@go-links/ui",
+      "name": "@goli/ui",
       "version": "0.1.0",
       "dependencies": {
         "@radix-ui/react-separator": "^1.1.7",
@@ -182,11 +182,11 @@
 
     "@floating-ui/utils": ["@floating-ui/utils@0.2.12", "", {}, "sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww=="],
 
-    "@go-links/desktop": ["@go-links/desktop@workspace:apps/desktop"],
+    "@goli/desktop": ["@goli/desktop@workspace:apps/desktop"],
 
-    "@go-links/ui": ["@go-links/ui@workspace:packages/ui"],
+    "@goli/ui": ["@goli/ui@workspace:packages/ui"],
 
-    "@go-links/website": ["@go-links/website@workspace:apps/website"],
+    "@goli/website": ["@goli/website@workspace:apps/website"],
 
     "@hapi/address": ["@hapi/address@5.1.1", "", { "dependencies": { "@hapi/hoek": "^11.0.2" } }, "sha512-A+po2d/dVoY7cYajycYI43ZbYMXukuopIsqCjh5QzsBCipDtdofHntljDlpccMjIfTy6UOkg+5KPriwYch2bXA=="],
 
@@ -1842,7 +1842,7 @@
 
     "@eslint/eslintrc/globals": ["globals@14.0.0", "", {}, "sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ=="],
 
-    "@go-links/website/@types/node": ["@types/node@20.11.25", "", { "dependencies": { "undici-types": "~5.26.4" } }, "sha512-TBHyJxk2b7HceLVGFcpAUjsa5zIdsPWlR6XHfyGzd0SFu+/NFgQgMAl96MSDZgQDvJAvV6BKsFOrt6zIL09JDw=="],
+    "@goli/website/@types/node": ["@types/node@20.11.25", "", { "dependencies": { "undici-types": "~5.26.4" } }, "sha512-TBHyJxk2b7HceLVGFcpAUjsa5zIdsPWlR6XHfyGzd0SFu+/NFgQgMAl96MSDZgQDvJAvV6BKsFOrt6zIL09JDw=="],
 
     "@img/sharp-wasm32/@emnapi/runtime": ["@emnapi/runtime@1.11.3", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA=="],
 
@@ -2076,7 +2076,7 @@
 
     "@electron/universal/minimatch/brace-expansion": ["brace-expansion@2.1.4", "", { "dependencies": { "balanced-match": "^1.0.0" } }, "sha512-hGfVzPxthbf3+2yjg/RBs60cB0FhqBS/zvdV/4wn4/BmN0bNMMHPc4V/BbFieqf1TKAGGAHnY4eSjajCl0f2Xg=="],
 
-    "@go-links/website/@types/node/undici-types": ["undici-types@5.26.5", "", {}, "sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA=="],
+    "@goli/website/@types/node/undici-types": ["undici-types@5.26.5", "", {}, "sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA=="],
 
     "@img/sharp-wasm32/@emnapi/runtime/tslib": ["tslib@2.8.1", "", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
 

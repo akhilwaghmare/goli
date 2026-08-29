@@ -3,9 +3,9 @@
 # PKG postinstall hook and by the maintenance CLI after administrator approval.
 set -euo pipefail
 
-hosts_file="/etc/hosts"; marker="# goli managed"; plist="/Library/LaunchDaemons/com.goli.local.plist"
+hosts_file="/etc/hosts"; marker="# goli managed"; plist="/Library/LaunchDaemons/app.akhil.goli.plist"
 data_dir="/Library/Application Support/Goli"; cert_dir="$data_dir/certs"; ca_cert="$cert_dir/goli-local-ca.pem"; ca_key="$cert_dir/goli-local-ca-key.pem"; server_cert="$cert_dir/server.pem"; server_key="$cert_dir/server-key.pem"; openssl="/usr/bin/openssl"
-/bin/launchctl bootout system/com.goli.local 2>/dev/null || true
+/bin/launchctl bootout system/app.akhil.goli 2>/dev/null || true
 if /usr/sbin/lsof -nP -iTCP:80 -sTCP:LISTEN 2>/dev/null | /usr/bin/grep -q . || /usr/sbin/lsof -nP -iTCP:443 -sTCP:LISTEN 2>/dev/null | /usr/bin/grep -q .; then echo "Goli cannot continue because another service is using port 80 or 443." >&2; exit 1; fi
 if /usr/bin/grep -vF "$marker" "$hosts_file" | /usr/bin/awk '$1 !~ /^#/ { for (i=2; i<=NF; i++) if ($i == "go.li") found=1 } END { exit(found ? 0 : 1) }'; then echo "Goli cannot continue because 'go.li' belongs to another host mapping." >&2; exit 1; fi
 if ! /usr/bin/grep -qF "$marker" "$hosts_file"; then printf '\n127.0.0.1 go.li %s\n' "$marker" >> "$hosts_file"; fi

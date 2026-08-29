@@ -1,5 +1,5 @@
 {
-  "name": "go-links",
+  "name": "goli",
   "version": "0.1.0",
   "private": true,
   "workspaces": [
@@ -11,7 +11,7 @@
     "dev": "bun run --cwd apps/website dev",
     "build": "bun run --cwd apps/website build",
     "lint": "bun run --cwd apps/website lint",
-    "build:service": "cd apps/local-service && go build ./cmd/golinks",
+    "build:service": "cd apps/local-service && go build ./cmd/goli",
     "dev:desktop": "bun run --cwd apps/desktop dev",
     "build:desktop": "bun run --cwd apps/desktop build",
     "test:desktop": "bun run --cwd apps/desktop test",

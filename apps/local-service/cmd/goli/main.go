@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	localservice "github.com/go-links/local-service"
+	localservice "github.com/goli/local-service"
 )
 
 var version = "dev"

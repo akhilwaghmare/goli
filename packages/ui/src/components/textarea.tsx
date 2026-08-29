@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { cn } from "@go-links/ui/lib/utils"
+import { cn } from "@goli/ui/lib/utils"
 
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   return (

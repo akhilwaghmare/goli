@@ -8,7 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@go-links/ui/components/sidebar";
+} from "@goli/ui/components/sidebar";
 import type { UpdateState } from "../shared/contracts";
 
 export type Page = "links" | "analytics" | "settings";

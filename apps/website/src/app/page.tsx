@@ -1,5 +1,5 @@
-import { Button } from "@go-links/ui/components/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@go-links/ui/components/card";
+import { Button } from "@goli/ui/components/button";
+import { Card, CardDescription, CardHeader, CardTitle } from "@goli/ui/components/card";
 import { Code2, Github, Globe2, HardDrive } from "lucide-react";
 import Image from "next/image";
 import { AppleIcon } from "../components/apple-icon";

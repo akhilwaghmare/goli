@@ -1,4 +1,4 @@
-module github.com/go-links/local-service
+module github.com/goli/local-service
 
 go 1.22
 

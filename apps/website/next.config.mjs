@@ -1,3 +1,3 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = { transpilePackages: ["@go-links/ui"] };
+const nextConfig = { transpilePackages: ["@goli/ui"] };
 export default nextConfig;

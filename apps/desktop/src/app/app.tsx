@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SidebarInset, SidebarProvider } from "@go-links/ui/components/sidebar";
+import { SidebarInset, SidebarProvider } from "@goli/ui/components/sidebar";
 import { AppSidebar, type Page } from "../components/app-sidebar";
 import { Notice } from "../components/notice";
 import { useAppearance } from "./use-appearance";

@@ -1,5 +1,5 @@
 {
-  "name": "@go-links/desktop",
+  "name": "@goli/desktop",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@go-links/ui": "workspace:*",
+    "@goli/ui": "workspace:*",
     "@vitejs/plugin-react": "^5.1.1",
     "react": "19.2.8",
     "react-dom": "19.2.8"
@@ -32,7 +32,7 @@
     "wait-on": "^8.0.3"
   },
   "build": {
-    "appId": "com.golinks.goli",
+    "appId": "app.akhil.goli",
     "productName": "Goli",
     "directories": { "output": "release" },
     "files": ["dist/**/*", "dist-electron/**/*", "package.json"],

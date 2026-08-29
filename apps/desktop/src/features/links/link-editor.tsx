@@ -1,7 +1,7 @@
 import type { FormEvent } from "react";
-import { Button } from "@go-links/ui/components/button";
-import { Input } from "@go-links/ui/components/input";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@go-links/ui/components/input-group";
+import { Button } from "@goli/ui/components/button";
+import { Input } from "@goli/ui/components/input";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@goli/ui/components/input-group";
 import type { Link, LinkInput } from "../../shared/contracts";
 
 type LinkEditorProps = { draft: LinkInput; editing: Link | null; onCancel(): void; onChange(draft: LinkInput): void; onSave(): Promise<void> };

@@ -1,4 +1,4 @@
-import { cn } from "@go-links/ui/lib/utils"
+import { cn } from "@goli/ui/lib/utils"
 
 function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (

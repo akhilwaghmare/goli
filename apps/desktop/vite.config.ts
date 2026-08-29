@@ -7,8 +7,8 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: [
-      { find: "@go-links/ui/globals.css", replacement: path.resolve(import.meta.dirname, "../../packages/ui/src/styles/globals.css") },
-      { find: "@go-links/ui", replacement: path.resolve(import.meta.dirname, "../../packages/ui/src") },
+      { find: "@goli/ui/globals.css", replacement: path.resolve(import.meta.dirname, "../../packages/ui/src/styles/globals.css") },
+      { find: "@goli/ui", replacement: path.resolve(import.meta.dirname, "../../packages/ui/src") },
       { find: "@", replacement: path.resolve(import.meta.dirname, "./src") },
     ],
   },

@@ -1,5 +1,5 @@
 {
-  "name": "@go-links/website",
+  "name": "@goli/website",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@go-links/ui": "workspace:*",
+    "@goli/ui": "workspace:*",
     "lucide-react": "1.37.0",
     "next": "16.3.3",
     "react": "19.2.8",

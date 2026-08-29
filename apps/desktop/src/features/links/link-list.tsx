@@ -1,7 +1,7 @@
 import { Check, Copy, Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Badge } from "@go-links/ui/components/badge";
-import { Button } from "@go-links/ui/components/button";
+import { Badge } from "@goli/ui/components/badge";
+import { Button } from "@goli/ui/components/button";
 import type { Link } from "../../shared/contracts";
 
 type LinkListProps = { links: Link[]; onCopy(link: Link): Promise<void>; onEdit(link: Link): void; onOpenDestination(link: Link): Promise<void>; onRemove(link: Link): Promise<void> };

@@ -1,7 +1,7 @@
 import { Download, HardDrive, MonitorCog, Moon, RotateCcw, ShieldAlert, Sun, Upload } from "lucide-react";
-import { Button } from "@go-links/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@go-links/ui/components/card";
-import { Separator } from "@go-links/ui/components/separator";
+import { Button } from "@goli/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@goli/ui/components/card";
+import { Separator } from "@goli/ui/components/separator";
 import type { Appearance } from "../../app/appearance";
 import { PageShell } from "../../components/page-shell";
 import type { SystemController } from "../system/use-system";

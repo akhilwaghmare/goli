@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ "${EUID}" -ne 0 ]]; then echo "Run with sudo: sudo $0" >&2; exit 1; fi
-plist="/Library/LaunchDaemons/com.goli.local.plist"
+plist="/Library/LaunchDaemons/app.akhil.goli.plist"
 cert_dir="/Library/Application Support/Goli/certs"
 /bin/launchctl bootout system "$plist" 2>/dev/null || true
 /bin/rm -f "$plist"

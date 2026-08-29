@@ -1,7 +1,7 @@
 import { Plus, Search } from "lucide-react";
-import { Button } from "@go-links/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@go-links/ui/components/dialog";
-import { Input } from "@go-links/ui/components/input";
+import { Button } from "@goli/ui/components/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@goli/ui/components/dialog";
+import { Input } from "@goli/ui/components/input";
 import { PageShell } from "../../components/page-shell";
 import { LinkEditor } from "./link-editor";
 import { LinkList } from "./link-list";

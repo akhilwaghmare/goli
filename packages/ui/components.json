@@ -11,9 +11,9 @@
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@go-links/ui/components",
-    "utils": "@go-links/ui/lib/utils",
-    "ui": "@go-links/ui/components",
-    "lib": "@go-links/ui/lib"
+    "components": "@goli/ui/components",
+    "utils": "@goli/ui/lib/utils",
+    "ui": "@goli/ui/components",
+    "lib": "@goli/ui/lib"
   }
 }

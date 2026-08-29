@@ -1,10 +1,10 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@go-links/ui/lib/utils"
-import { Button } from "@go-links/ui/components/button"
-import { Input } from "@go-links/ui/components/input"
-import { Textarea } from "@go-links/ui/components/textarea"
+import { cn } from "@goli/ui/lib/utils"
+import { Button } from "@goli/ui/components/button"
+import { Input } from "@goli/ui/components/input"
+import { Textarea } from "@goli/ui/components/textarea"
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (

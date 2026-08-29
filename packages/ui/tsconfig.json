@@ -10,7 +10,7 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@go-links/ui/*": ["./src/*"]
+      "@goli/ui/*": ["./src/*"]
     }
   },
   "include": ["src"]

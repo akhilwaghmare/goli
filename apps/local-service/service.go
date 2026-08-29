@@ -1,7 +1,7 @@
 package localservice
 
 import (
-	"github.com/go-links/local-service/internal/server"
+	"github.com/goli/local-service/internal/server"
 )
 
 // New creates the loopback-only Goli HTTP service.
