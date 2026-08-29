@@ -38,7 +38,7 @@ export default function Home() {
             </a>
           </Button>
         </div>
-        <div className="mt-12 w-full max-w-[540px] rounded-xl bg-[#17241e] p-7 text-left font-['DM_Mono'] text-base text-[#f8f7f2] shadow-[12px_12px_0_#d8ead3]">
+        <div className="mt-12 w-full max-w-[540px] rounded-xl bg-[#17241e] p-7 text-left font-['DM_Mono'] text-base text-[#f8f7f2]">
           <p><span className="text-[#a4d79a]">›</span> go.li/calendar</p>
           <p className="text-[13px] text-[#9ca89f]">Opening calendar.google.com…</p>
         </div>
@@ -50,7 +50,7 @@ export default function Home() {
           width={2464}
           height={1744}
           priority
-          className="mx-auto w-full max-w-[1084px] rounded-xl shadow-[12px_12px_0_#d8ead3]"
+          className="mx-auto w-full max-w-[1084px] rounded-xl"
         />
       </section>
       <section className="mx-auto grid max-w-[1084px] grid-cols-3 gap-6 px-7 py-[110px] max-[700px]:grid-cols-1 max-[700px]:py-[70px]">
