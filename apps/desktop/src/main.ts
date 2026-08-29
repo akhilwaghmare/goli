@@ -4,7 +4,7 @@ import { promisify } from "node:util";
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { serviceApi } from "./api";
-import { checkForUpdate, downloadUpdate, updateState } from "./updates";
+import { checkForUpdate, downloadUpdate, handoffUpdate, reportUpdateError, startUpdatePolling, subscribeUpdates, updateState } from "./updates";
 import { validateDestinationUrl, validateLinkID, validateLinkInput, validateMaintenanceAction } from "./shared/validation";
 import type { MaintenanceAction, SystemStatus } from "./shared/contracts";
 
@@ -62,6 +62,8 @@ app.whenReady().then(() => {
   ipcMain.handle("system:run", async (_event, requested) => { const action = validateMaintenanceAction(requested) as MaintenanceAction; return authorize(action); });
   ipcMain.handle("updates:state", updateState);
   ipcMain.handle("updates:check", () => checkForUpdate(app.getVersion()));
-  ipcMain.handle("updates:download", async () => { const state = await downloadUpdate(); if (state.status === "verified") { await shell.openPath(state.packagePath); return { status: "handoff", version: state.version }; } return state; });
+  ipcMain.handle("updates:download", async () => { const state = await downloadUpdate(); if (state.status === "verified") { const error = await shell.openPath(state.packagePath); return error ? reportUpdateError(`Could not open the verified installer: ${error}`) : handoffUpdate(); } return state; });
+  subscribeUpdates((state) => window?.webContents.send("updates:state", state));
+  startUpdatePolling(() => app.getVersion());
 });
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });

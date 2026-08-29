@@ -8,6 +8,7 @@ export function useUpdates(onNotice: (message: string | null) => void) {
 
   useEffect(() => {
     void window.goliBridge.updates.state().then(setUpdates).catch((error: unknown) => onNotice(error instanceof Error ? error.message : "Could not load update status."));
+    return window.goliBridge.updates.onState(setUpdates);
   }, []);
 
   const check = async () => {

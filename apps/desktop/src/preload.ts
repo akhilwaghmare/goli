@@ -12,7 +12,7 @@ const bridge: GoliBridge = {
     import: () => ipcRenderer.invoke("links:import"),
   },
   system: { status: () => ipcRenderer.invoke("system:status"), run: (action: MaintenanceAction) => ipcRenderer.invoke("system:run", action) },
-  updates: { state: () => ipcRenderer.invoke("updates:state"), check: () => ipcRenderer.invoke("updates:check"), download: () => ipcRenderer.invoke("updates:download") },
+  updates: { state: () => ipcRenderer.invoke("updates:state"), check: () => ipcRenderer.invoke("updates:check"), download: () => ipcRenderer.invoke("updates:download"), onState: (listener) => { const handler = (_event: Electron.IpcRendererEvent, state: unknown) => listener(state as Parameters<typeof listener>[0]); ipcRenderer.on("updates:state", handler); return () => ipcRenderer.removeListener("updates:state", handler); } },
 };
 
 contextBridge.exposeInMainWorld("goliBridge", bridge);

@@ -1,4 +1,4 @@
-import { BarChart3, Download, Link as LinkIcon, Settings } from "lucide-react";
+import { BarChart3, CircleAlert, Download, ExternalLink, Link as LinkIcon, RefreshCw, Settings } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,27 +9,38 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@goli/ui/components/sidebar";
-import type { UpdateState } from "../shared/contracts";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@goli/ui/components/tooltip";
+import type { UpdateController } from "../features/system/use-updates";
 
 export type Page = "links" | "analytics" | "settings";
 
 const navigation = [
   { id: "links" as const, label: "Links", icon: LinkIcon },
   { id: "analytics" as const, label: "Analytics", icon: BarChart3 },
-  { id: "settings" as const, label: "Settings", icon: Settings },
 ];
 
-function updateLabel(update: UpdateState) {
-  if (update.status === "available") return `Update ${update.version} available`;
-  if (update.status === "downloading") return `Downloading ${update.percent}%`;
-  if (update.status === "verified") return `Update ${update.version} ready`;
-  if (update.status === "handoff") return "Update opened";
-  if (update.status === "disabled" || update.status === "error") return update.message;
-  return "Up to date";
-}
-
-export function AppSidebar({ activePage, appVersion, onNavigate, updates }: { activePage: Page; appVersion: string | undefined; onNavigate(page: Page): void; updates: UpdateState }) {
+export function AppSidebar({ activePage, onNavigate, updates }: { activePage: Page; onNavigate(page: Page): void; updates: UpdateController }) {
+  const update = updates.updates;
+  const isBusy = update.status === "checking" || update.status === "downloading";
+  const icon = update.status === "available" || update.status === "downloading" ? Download
+    : update.status === "handoff" ? ExternalLink
+      : update.status === "error" || update.status === "disabled" ? CircleAlert
+        : RefreshCw;
+  const tooltip = update.status === "available" ? `Download Goli ${update.version}`
+    : update.status === "downloading" ? `Downloading Goli ${update.percent}%`
+      : update.status === "checking" ? "Checking for updates…"
+        : update.status === "handoff" ? "Installer opened"
+          : update.status === "error" || update.status === "disabled" ? update.message
+            : "Check for updates";
+  const Icon = icon;
+  const handleUpdate = () => {
+    if (isBusy) return;
+    if (update.status === "available") { void updates.download(); return; }
+    if (update.status === "handoff" || update.status === "disabled" || update.status === "error") { onNavigate("settings"); return; }
+    void updates.check();
+  };
   return (
+    <TooltipProvider>
     <Sidebar className="drag-region">
       <SidebarHeader className="px-5 pt-14 pb-8">
         <p className="text-lg font-semibold tracking-tight">Goli</p>
@@ -49,12 +60,15 @@ export function AppSidebar({ activePage, appVersion, onNavigate, updates }: { ac
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <button type="button" onClick={() => onNavigate("settings")} className="no-drag w-full rounded-lg border bg-background p-3 text-left shadow-sm transition-colors hover:bg-sidebar-accent">
-          <span className="flex items-center gap-2 text-sm font-medium"><Download className="size-4" />Updates</span>
-          <span className="mt-2 block truncate text-xs text-muted-foreground">{updateLabel(updates)}</span>
-          <span className="mt-1 block text-xs text-muted-foreground">Goli {appVersion ?? "…"}</span>
-        </button>
+        <div className="flex items-center justify-between gap-1">
+          <button type="button" onClick={() => onNavigate("settings")} className={`no-drag inline-flex h-8 items-center gap-2 rounded-md px-2 text-sm transition-colors hover:bg-sidebar-accent hover:text-foreground ${activePage === "settings" ? "bg-sidebar-accent text-foreground" : "text-muted-foreground"}`}><Settings className="size-4" />Settings</button>
+          <Tooltip>
+            <TooltipTrigger asChild><button type="button" aria-label={tooltip} disabled={isBusy} onClick={handleUpdate} className="no-drag inline-flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground disabled:opacity-60"><Icon className={`size-4 ${isBusy ? "animate-spin" : ""}`} /></button></TooltipTrigger>
+            <TooltipContent side="top">{tooltip}</TooltipContent>
+          </Tooltip>
+        </div>
       </SidebarFooter>
     </Sidebar>
+    </TooltipProvider>
   );
 }

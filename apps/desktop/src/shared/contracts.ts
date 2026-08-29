@@ -41,5 +41,5 @@ export type GoliBridge = {
     import(): Promise<void>;
   };
   system: { status(): Promise<SystemStatus>; run(action: MaintenanceAction): Promise<string> };
-  updates: { state(): Promise<UpdateState>; check(): Promise<UpdateState>; download(): Promise<UpdateState> };
+  updates: { state(): Promise<UpdateState>; check(): Promise<UpdateState>; download(): Promise<UpdateState>; onState(listener: (state: UpdateState) => void): () => void };
 };

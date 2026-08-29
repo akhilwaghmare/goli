@@ -30,7 +30,7 @@ export function App() {
 
   return (
     <SidebarProvider className="bg-background text-foreground">
-      <AppSidebar activePage={page} onNavigate={setPage} appVersion={system.status?.appVersion} updates={updates.updates} />
+      <AppSidebar activePage={page} onNavigate={setPage} updates={updates} />
       <SidebarInset className="min-w-0">
         <div className="drag-region h-12" />
         <div className="px-6 pb-8 sm:px-10">

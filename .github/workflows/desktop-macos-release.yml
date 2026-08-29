@@ -1,0 +1,71 @@
+name: Release macOS desktop
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-go@v5
+        with: { go-version: "1.22" }
+      - run: bun install --frozen-lockfile
+      - name: Validate and align the release version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          VERSION="${TAG#v}"
+          test "$TAG" = "v$VERSION"
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          node apps/desktop/scripts/set-version.mjs "$VERSION"
+          test "$(node -p "require('./apps/desktop/package.json').version")" = "$VERSION"
+      - name: Run focused validation
+        run: |
+          bun run test:desktop
+          (cd apps/desktop && bun run typecheck)
+          bun run test:macos-tools
+      - name: Build unsigned macOS package
+        env:
+          VERSION: ${{ github.ref_name }}
+          GOLI_UPDATE_REPOSITORY: ${{ github.repository }}
+        run: |
+          VERSION="${VERSION#v}"
+          export VERSION
+          bun run package:macos
+          mv dist/goli-macos.pkg "dist/goli-macos-${VERSION}.pkg"
+      - name: Create and validate update manifest
+        env:
+          TAG: ${{ github.ref_name }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          VERSION="${TAG#v}"
+          PACKAGE="goli-macos-${VERSION}.pkg"
+          CHECKSUM="$(shasum -a 256 "dist/${PACKAGE}" | awk '{print $1}')"
+          export CHECKSUM
+          node - <<'NODE'
+          const fs = require("node:fs");
+          const version = process.env.TAG.slice(1);
+          const packageName = `goli-macos-${version}.pkg`;
+          const manifest = {
+            version,
+            packageUrl: `https://github.com/${process.env.REPOSITORY}/releases/download/${process.env.TAG}/${packageName}`,
+            sha256: process.env.CHECKSUM,
+            notesUrl: `https://github.com/${process.env.REPOSITORY}/releases/tag/${process.env.TAG}`,
+          };
+          if (!/^\d+\.\d+\.\d+$/.test(manifest.version) || !/^[a-f0-9]{64}$/i.test(manifest.sha256) || !fs.existsSync(`dist/${packageName}`)) process.exit(1);
+          fs.writeFileSync("dist/goli-update.json", `${JSON.stringify(manifest)}\n`);
+          NODE
+      - name: Publish immutable GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          VERSION="${TAG#v}"
+          gh release create "$TAG" "dist/goli-macos-${VERSION}.pkg" dist/goli-update.json --title "Goli ${VERSION}" --generate-notes
