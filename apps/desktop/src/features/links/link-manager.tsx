@@ -17,7 +17,7 @@ export function LinkManager({ links }: LinkManagerProps) {
         <div className="border-b p-4">
           <label className="relative block"><Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" /><Input className="pl-9" value={links.query} placeholder="Search shortcuts" aria-label="Search shortcuts" onChange={(event) => links.setQuery(event.target.value)} /></label>
         </div>
-        <div className="px-5"><LinkList links={links.shownLinks} onCopy={links.copy} onEdit={links.startEditing} onRemove={links.remove} /></div>
+        <div className="px-5"><LinkList links={links.shownLinks} onCopy={links.copy} onEdit={links.startEditing} onOpenDestination={links.openDestination} onRemove={links.remove} /></div>
       </div>
       <Dialog open={links.editorOpen} onOpenChange={(open) => { if (!open) links.cancelEditing(); }}>
         <DialogContent className="text-foreground">

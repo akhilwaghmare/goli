@@ -5,7 +5,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { serviceApi } from "./api";
 import { checkForUpdate, downloadUpdate, updateState } from "./updates";
-import { validateLinkID, validateLinkInput, validateMaintenanceAction } from "./shared/validation";
+import { validateDestinationUrl, validateLinkID, validateLinkInput, validateMaintenanceAction } from "./shared/validation";
 import type { MaintenanceAction, SystemStatus } from "./shared/contracts";
 
 const execFileAsync = promisify(execFile);
@@ -52,6 +52,7 @@ app.whenReady().then(() => {
   ipcMain.handle("links:create", (_event, input) => serviceApi.create(validateLinkInput(input)));
   ipcMain.handle("links:update", (_event, id, input) => serviceApi.update(validateLinkID(id), validateLinkInput(input)));
   ipcMain.handle("links:remove", (_event, id) => serviceApi.remove(validateLinkID(id)));
+  ipcMain.handle("links:open-destination", (_event, destinationUrl) => shell.openExternal(validateDestinationUrl(destinationUrl)));
   ipcMain.handle("links:export", async () => { const result = await dialog.showSaveDialog({ defaultPath: "goli-export.json" }); if (result.canceled || !result.filePath) return false; await writeFile(result.filePath, JSON.stringify(await serviceApi.export(), null, 2)); return true; });
   ipcMain.handle("links:import", async () => { const result = await dialog.showOpenDialog({ properties: ["openFile"], filters: [{ name: "Goli exports", extensions: ["json"] }] }); if (!result.canceled && result.filePaths[0]) await serviceApi.import(JSON.parse(await readFile(result.filePaths[0], "utf8"))); });
   ipcMain.handle("system:status", systemStatus);

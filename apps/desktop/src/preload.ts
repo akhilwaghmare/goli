@@ -7,6 +7,7 @@ const bridge: GoliBridge = {
     create: (input: LinkInput) => ipcRenderer.invoke("links:create", input),
     update: (id: string, input: LinkInput) => ipcRenderer.invoke("links:update", id, input),
     remove: (id: string) => ipcRenderer.invoke("links:remove", id),
+    openDestination: (destinationUrl: string) => ipcRenderer.invoke("links:open-destination", destinationUrl),
     export: () => ipcRenderer.invoke("links:export"),
     import: () => ipcRenderer.invoke("links:import"),
   },

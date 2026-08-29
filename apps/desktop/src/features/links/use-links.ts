@@ -70,9 +70,21 @@ export function useLinks(onNotice: (message: string | null) => void) {
   };
 
   const copy = async (link: Link) => {
-    await navigator.clipboard.writeText(`https://go.li/${link.slug}`);
-    onNotice("Shortcut copied.");
+    try {
+      await navigator.clipboard.writeText(`https://go.li/${link.slug}`);
+    } catch (error) {
+      onNotice(error instanceof Error ? error.message : "Could not copy shortcut.");
+      throw error;
+    }
   };
 
-  return { cancelEditing, copy, draft, editing, editorOpen, links, refresh, remove, save, setDraft, setQuery, shownLinks, startCreating, startEditing, query };
+  const openDestination = async (link: Link) => {
+    try {
+      await window.goliBridge.links.openDestination(link.destinationUrl);
+    } catch (error) {
+      onNotice(error instanceof Error ? error.message : "Could not open destination.");
+    }
+  };
+
+  return { cancelEditing, copy, draft, editing, editorOpen, links, openDestination, refresh, remove, save, setDraft, setQuery, shownLinks, startCreating, startEditing, query };
 }

@@ -36,6 +36,7 @@ export type GoliBridge = {
     create(input: LinkInput): Promise<Link>;
     update(id: string, input: LinkInput): Promise<Link>;
     remove(id: string): Promise<void>;
+    openDestination(destinationUrl: string): Promise<void>;
     export(): Promise<boolean>;
     import(): Promise<void>;
   };
