@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type { UpdateState } from "../../shared/contracts";
 
+export type UpdateController = ReturnType<typeof useUpdates>;
+
 export function useUpdates(onNotice: (message: string | null) => void) {
   const [updates, setUpdates] = useState<UpdateState>({ status: "idle" });
 

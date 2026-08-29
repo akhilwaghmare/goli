@@ -17,6 +17,7 @@ I wanted to share some of my preferences here so we can be more aligned as we wo
 - If your TS code looks like a Python dev wrote it, it is bad TS code
 - Avoid one-line functions that are just casting wrappers
 - When implementing styles, use inline tailwind instead of editing a CSS file, unless otherwise instructed
+- Use shadcn/ui components where possible. Never try to make your own wrappers or approximations, always install from shadcn
 - Use bun unless otherwise instructed
 - Do not test with the in-app browser unless otherwise instructed
 

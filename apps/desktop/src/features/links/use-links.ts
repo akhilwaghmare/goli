@@ -3,10 +3,13 @@ import type { Link, LinkInput } from "../../shared/contracts";
 
 const blankLink: LinkInput = { slug: "", destinationUrl: "" };
 
-export function useLinks(onNotice: (message: string | null) => void, refreshKey: number) {
+export type LinkStore = ReturnType<typeof useLinks>;
+
+export function useLinks(onNotice: (message: string | null) => void) {
   const [links, setLinks] = useState<Link[]>([]);
   const [draft, setDraft] = useState<LinkInput>(blankLink);
   const [editing, setEditing] = useState<Link | null>(null);
+  const [editorOpen, setEditorOpen] = useState(false);
   const [query, setQuery] = useState("");
 
   const refresh = async () => {
@@ -17,7 +20,7 @@ export function useLinks(onNotice: (message: string | null) => void, refreshKey:
     }
   };
 
-  useEffect(() => { void refresh(); }, [refreshKey]);
+  useEffect(() => { void refresh(); }, []);
 
   const shownLinks = useMemo(
     () => links.filter((link) => `${link.slug} ${link.destinationUrl}`.toLowerCase().includes(query.toLowerCase())),
@@ -30,6 +33,7 @@ export function useLinks(onNotice: (message: string | null) => void, refreshKey:
       else await window.goliBridge.links.create(draft);
       setDraft(blankLink);
       setEditing(null);
+      setEditorOpen(false);
       onNotice(null);
       await refresh();
     } catch (error) {
@@ -40,11 +44,19 @@ export function useLinks(onNotice: (message: string | null) => void, refreshKey:
   const startEditing = (link: Link) => {
     setEditing(link);
     setDraft({ slug: link.slug, destinationUrl: link.destinationUrl });
+    setEditorOpen(true);
+  };
+
+  const startCreating = () => {
+    setEditing(null);
+    setDraft(blankLink);
+    setEditorOpen(true);
   };
 
   const cancelEditing = () => {
     setEditing(null);
     setDraft(blankLink);
+    setEditorOpen(false);
   };
 
   const remove = async (link: Link) => {
@@ -62,5 +74,5 @@ export function useLinks(onNotice: (message: string | null) => void, refreshKey:
     onNotice("Shortcut copied.");
   };
 
-  return { cancelEditing, copy, draft, editing, remove, save, setDraft, setQuery, shownLinks, startEditing, query };
+  return { cancelEditing, copy, draft, editing, editorOpen, links, refresh, remove, save, setDraft, setQuery, shownLinks, startCreating, startEditing, query };
 }

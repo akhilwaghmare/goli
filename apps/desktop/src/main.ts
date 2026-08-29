@@ -14,7 +14,14 @@ const maintenancePath = "/usr/local/libexec/goli/goli-maintenance";
 
 function createWindow() {
   if (window) return window.show();
-  window = new BrowserWindow({ width: 1120, height: 760, minWidth: 880, minHeight: 600, webPreferences: { preload: join(__dirname, "preload.cjs"), contextIsolation: true, sandbox: true, nodeIntegration: false } });
+  window = new BrowserWindow({
+    width: 1120,
+    height: 760,
+    minWidth: 880,
+    minHeight: 600,
+    ...(process.platform === "darwin" ? { titleBarStyle: "hiddenInset" as const, trafficLightPosition: { x: 16, y: 18 } } : {}),
+    webPreferences: { preload: join(__dirname, "preload.cjs"), contextIsolation: true, sandbox: true, nodeIntegration: false },
+  });
   const devUrl = process.env.GOLI_DEV_SERVER_URL;
   if (devUrl) void window.loadURL(devUrl); else void window.loadFile(join(__dirname, "../dist/index.html"));
   window.on("closed", () => { window = null; });

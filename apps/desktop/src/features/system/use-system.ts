@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type { MaintenanceAction, SystemStatus } from "../../shared/contracts";
 
+export type SystemController = ReturnType<typeof useSystem>;
+
 export function useSystem(onNotice: (message: string | null) => void) {
   const [status, setStatus] = useState<SystemStatus | null>(null);
 
