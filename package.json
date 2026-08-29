@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "apps/website",
-    "apps/desktop"
+    "apps/desktop",
+    "packages/ui"
   ],
   "scripts": {
     "dev": "bun run --cwd apps/website dev",

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/styles/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@go-links/ui/components",
+    "utils": "@go-links/ui/lib/utils",
+    "ui": "@go-links/ui/components",
+    "lib": "@go-links/ui/lib"
+  }
+}
