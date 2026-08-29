@@ -36,7 +36,7 @@ export default function Home() {
             size="lg"
             className="h-auto rounded-full border border-[#17241e] bg-[#17241e] px-[22px] py-[14px] font-dm-sans text-sm font-medium text-white hover:bg-[#26382f]"
           >
-            <a href="#download">
+            <a href="/download">
               <AppleIcon aria-hidden="true" className="size-4 fill-current" />
               Download for macOS
             </a>
