@@ -1,6 +1,6 @@
 import { Button } from "@goli/ui/components/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@goli/ui/components/card";
-import { Code2, Github, Globe2, HardDrive } from "lucide-react";
+import { Code2, Globe2, HardDrive } from "lucide-react";
 import Image from "next/image";
 import { AppleIcon } from "../components/apple-icon";
 
@@ -13,7 +13,7 @@ export default function Home() {
         </a>
         <Button asChild variant="outline" size="sm" className="rounded-full border-[#17241e] bg-transparent text-[#17241e] hover:bg-[#e9e7df]">
           <a href="https://github.com/akhilwaghmare/goli" target="_blank" rel="noreferrer">
-            <Github aria-hidden="true" />
+            <Image src="/github.svg" alt="" aria-hidden="true" width={24} height={24} />
             GitHub
           </a>
         </Button>
