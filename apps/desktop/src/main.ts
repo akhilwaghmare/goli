@@ -36,7 +36,10 @@ async function systemStatus(): Promise<SystemStatus> {
   try {
     const health = await serviceApi.health();
     const { stdout } = await execFileAsync(maintenancePath, ["status"]);
-    return { ...JSON.parse(stdout) as Omit<SystemStatus, "serviceVersion" | "appVersion">, serviceVersion: health.version, appVersion: app.getVersion() };
+    const maintenance = JSON.parse(stdout) as Omit<SystemStatus, "certificates" | "serviceVersion" | "appVersion">;
+    // A successful Electron request verifies go.li against macOS's trust store.
+    // The certificate files themselves are root-only and cannot be checked here.
+    return { ...maintenance, certificates: "valid", serviceVersion: health.version, appVersion: app.getVersion() };
   } catch {
     return { service: "unknown", hostname: "missing", certificates: "missing", ports: "conflict", serviceVersion: null, appVersion: app.getVersion(), logs: ["Goli service is unavailable. Use Repair after checking for port or hostname conflicts."] };
   }
