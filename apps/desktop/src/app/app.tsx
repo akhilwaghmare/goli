@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SidebarInset, SidebarProvider } from "@go-links/ui/components/sidebar";
 import { AppSidebar, type Page } from "../components/app-sidebar";
 import { Notice } from "../components/notice";
 import { useAppearance } from "./use-appearance";
@@ -28,9 +29,9 @@ export function App() {
   };
 
   return (
-    <main className="flex min-h-screen bg-background text-foreground">
+    <SidebarProvider className="bg-background text-foreground">
       <AppSidebar activePage={page} onNavigate={setPage} appVersion={system.status?.appVersion} updates={updates.updates} />
-      <div className="min-w-0 flex-1">
+      <SidebarInset className="min-w-0">
         <div className="drag-region h-12" />
         <div className="px-6 pb-8 sm:px-10">
           {notice && <Notice message={notice} />}
@@ -38,7 +39,7 @@ export function App() {
           {page === "analytics" && <AnalyticsPage links={links.links} />}
           {page === "settings" && <SettingsPage appearance={appearance} onAppearanceChange={setAppearance} onImport={importLinks} onExport={exportLinks} system={system} updates={updates} />}
         </div>
-      </div>
-    </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

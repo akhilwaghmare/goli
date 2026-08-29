@@ -1,4 +1,14 @@
 import { BarChart3, Download, Link as LinkIcon, Settings } from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@go-links/ui/components/sidebar";
 import type { UpdateState } from "../shared/contracts";
 
 export type Page = "links" | "analytics" | "settings";
@@ -20,16 +30,31 @@ function updateLabel(update: UpdateState) {
 
 export function AppSidebar({ activePage, appVersion, onNavigate, updates }: { activePage: Page; appVersion: string | undefined; onNavigate(page: Page): void; updates: UpdateState }) {
   return (
-    <aside className="drag-region flex min-h-screen w-60 shrink-0 flex-col border-r bg-muted/30 px-3 pt-14 pb-4">
-      <div className="px-3 pb-8"><p className="text-lg font-semibold tracking-tight">Goli</p></div>
-      <nav className="no-drag space-y-1" aria-label="Main navigation">
-        {navigation.map(({ id, label, icon: Icon }) => <button key={id} type="button" onClick={() => onNavigate(id)} className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${activePage === id ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"}`}><Icon className="size-4" />{label}</button>)}
-      </nav>
-      <button type="button" onClick={() => onNavigate("settings")} className="no-drag mt-auto w-full rounded-lg border bg-background p-3 text-left shadow-sm transition-colors hover:bg-accent">
-        <span className="flex items-center gap-2 text-sm font-medium"><Download className="size-4" />Updates</span>
-        <span className="mt-2 block truncate text-xs text-muted-foreground">{updateLabel(updates)}</span>
-        <span className="mt-1 block text-xs text-muted-foreground">Goli {appVersion ?? "…"}</span>
-      </button>
-    </aside>
+    <Sidebar className="drag-region">
+      <SidebarHeader className="px-5 pt-14 pb-8">
+        <p className="text-lg font-semibold tracking-tight">Goli</p>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu className="no-drag" aria-label="Main navigation">
+            {navigation.map(({ id, label, icon: Icon }) => (
+              <SidebarMenuItem key={id}>
+                <SidebarMenuButton isActive={activePage === id} onClick={() => onNavigate(id)} tooltip={label}>
+                  <Icon />
+                  <span>{label}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <button type="button" onClick={() => onNavigate("settings")} className="no-drag w-full rounded-lg border bg-background p-3 text-left shadow-sm transition-colors hover:bg-sidebar-accent">
+          <span className="flex items-center gap-2 text-sm font-medium"><Download className="size-4" />Updates</span>
+          <span className="mt-2 block truncate text-xs text-muted-foreground">{updateLabel(updates)}</span>
+          <span className="mt-1 block text-xs text-muted-foreground">Goli {appVersion ?? "…"}</span>
+        </button>
+      </SidebarFooter>
+    </Sidebar>
   );
 }
